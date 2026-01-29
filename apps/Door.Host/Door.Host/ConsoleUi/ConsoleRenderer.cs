@@ -18,6 +18,12 @@ namespace Door.Host.ConsoleUi
             Console.WriteLine("--------------------------------------------------");
         }
 
+        public void RenderConnectionStatus(bool isConnected)
+        {
+            var state = isConnected ? "Connected" : "Disconnected";
+            RenderStatus($"Connection: {state}");
+        }
+
         public void Log(string msg)
         {
             Console.WriteLine(msg);

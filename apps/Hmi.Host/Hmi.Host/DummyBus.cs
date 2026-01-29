@@ -5,6 +5,8 @@ namespace Hmi.Host
 {
     internal sealed class DummyBus : ICanBus
     {
+        public bool IsConnected => true;
+        public event Action<bool> ConnectionStateChanged;
         public event Action<CanFrame> FrameReceived;
 
         public void Send(CanFrame frame)
