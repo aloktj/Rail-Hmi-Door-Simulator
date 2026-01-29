@@ -15,11 +15,10 @@ namespace Hmi.Host
 
         private void OnFrameReceived(CanFrame frame)
         {
-            // Placeholder decode: Data[0]=doorId, Data[1]=state
-            if (frame.Data == null || frame.Data.Length < 2) return;
-
-            int doorId = frame.Data[0];
-            byte state = frame.Data[1];
+            if (!DoorStateFrame.TryParse(frame, out var doorId, out var state))
+            {
+                return;
+            }
 
             Console.WriteLine($"[HMI] Door {doorId} state={state}  (from ID=0x{frame.Id:X})");
         }
