@@ -23,17 +23,38 @@ namespace Hmi.Host
                 });
 
             string mode = options.GetValue("mode");
+            bool consoleMode = mode.Equals("console", StringComparison.OrdinalIgnoreCase) ||
+                mode.Equals("both", StringComparison.OrdinalIgnoreCase);
 
-            _bus = new Common.Transport.Ipc.IpcCanBus("RailCanBus", Common.Transport.Ipc.IpcCanBusRole.Server);
+            if (consoleMode)
+            {
+                ConsoleUi.ConsoleHost.EnsureConsoleAttached();
+            }
+
+            Action<string, Exception> busLogger = consoleMode
+                ? (message, exception) =>
+                {
+                    if (exception == null)
+                    {
+                        Console.WriteLine(message);
+                        return;
+                    }
+
+                    Console.WriteLine($"{message} {exception.GetType().Name}: {exception.Message}");
+                }
+                : null;
+
+            _bus = new Common.Transport.Ipc.IpcCanBus(
+                "RailCanBus",
+                Common.Transport.Ipc.IpcCanBusRole.Server,
+                busLogger);
             _bus.Start();
             ICanBus canBus = _bus;
 
             _hmiApp = new HmiApp(canBus);
 
-            if (mode.Equals("console", StringComparison.OrdinalIgnoreCase) ||
-                mode.Equals("both", StringComparison.OrdinalIgnoreCase))
+            if (consoleMode)
             {
-                ConsoleUi.ConsoleHost.EnsureConsoleAttached();
                 var r = new ConsoleUi.ConsoleRenderer();
 
                 r.RenderHeader("HMI Console");
