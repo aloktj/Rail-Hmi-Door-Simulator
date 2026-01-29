@@ -59,7 +59,10 @@ namespace Hmi.Host
 
                 r.RenderHeader("HMI Console");
                 r.RenderStatus("Waiting for door status...");
+                r.RenderConnectionStatus(_bus.IsConnected);
                 r.Log("Console mode active.");
+
+                _bus.ConnectionStateChanged += r.RenderConnectionStatus;
 
                 // Temporary test injection (remove later)
                 //if (bus is DummyBus dummy)

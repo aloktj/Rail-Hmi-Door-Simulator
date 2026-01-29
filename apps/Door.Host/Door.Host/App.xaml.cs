@@ -68,7 +68,10 @@ namespace Door.Host
 
                 r.RenderHeader("Door Console");
                 r.RenderStatus($"Door ID = {doorId}");
+                r.RenderConnectionStatus(_bus.IsConnected);
                 r.Log("Console mode active.");
+
+                _bus.ConnectionStateChanged += r.RenderConnectionStatus;
 
                 _doorApp.Start();
             }

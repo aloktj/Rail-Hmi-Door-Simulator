@@ -28,6 +28,8 @@ namespace Common.Transport.Ipc
         // Client side
         private NamedPipeClientStream _client;
 
+        public bool IsConnected { get; private set; }
+        public event Action<bool> ConnectionStateChanged;
         public event Action<CanFrame> FrameReceived;
 
         public IpcCanBus(string pipeName, IpcCanBusRole role)
@@ -111,6 +113,7 @@ namespace Common.Transport.Ipc
         public void Dispose()
         {
             _cts.Cancel();
+            UpdateConnectionState(false);
 
             try { _client?.Dispose(); } catch { }
 
@@ -147,6 +150,7 @@ namespace Common.Transport.Ipc
                     server.WaitForConnection();
 
                     lock (_lock) _serverClients.Add(server);
+                    UpdateServerConnectionState();
 
                     // Start a read loop for this client
                     var clientStream = server;
@@ -183,6 +187,7 @@ namespace Common.Transport.Ipc
             {
                 lock (_lock) _serverClients.Remove(client);
                 try { client.Dispose(); } catch { }
+                UpdateServerConnectionState();
             }
         }
 
@@ -203,6 +208,7 @@ namespace Common.Transport.Ipc
                     if (!_client.IsConnected)
                     {
                         _client.Connect(2000); // 2s timeout, retry if server not up yet
+                        UpdateConnectionState(true);
                         Task.Run(() => ClientReadLoop(_client, ct));
                     }
 
@@ -213,6 +219,7 @@ namespace Common.Transport.Ipc
                 {
                     try { _client?.Dispose(); } catch { }
                     _client = null;
+                    UpdateConnectionState(false);
                     LogFailure("ClientConnectLoop", ex);
                     Thread.Sleep(500);
                 }
@@ -233,6 +240,10 @@ namespace Common.Transport.Ipc
             catch (Exception ex)
             {
                 LogFailure("ClientReadLoop", ex);
+            }
+            finally
+            {
+                UpdateConnectionState(false);
             }
         }
 
@@ -338,6 +349,35 @@ namespace Common.Transport.Ipc
 
             var message = $"IpcCanBus {_role} pipe '{_pipeName}' {operation} failed.";
             _log(message, exception);
+        }
+
+        private void UpdateConnectionState(bool isConnected)
+        {
+            if (IsConnected == isConnected)
+            {
+                return;
+            }
+
+            IsConnected = isConnected;
+            ConnectionStateChanged?.Invoke(isConnected);
+        }
+
+        private void UpdateServerConnectionState()
+        {
+            bool anyConnected = false;
+            lock (_lock)
+            {
+                foreach (var client in _serverClients)
+                {
+                    if (client.IsConnected)
+                    {
+                        anyConnected = true;
+                        break;
+                    }
+                }
+            }
+
+            UpdateConnectionState(anyConnected);
         }
     }
 }
