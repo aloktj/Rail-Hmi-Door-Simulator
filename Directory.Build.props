@@ -1,0 +1,12 @@
+<Project>
+  <PropertyGroup>
+    <!-- Force x64 builds when possible -->
+    <Platforms>x64</Platforms>
+ 
+    <!-- Centralize build outputs -->
+    <BaseOutputPath>$(MSBuildThisFileDirectory)out\</BaseOutputPath>
+ 
+    <!-- Optional: reduce noise -->
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+</Project>

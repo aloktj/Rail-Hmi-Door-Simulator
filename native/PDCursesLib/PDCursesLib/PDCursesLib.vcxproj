@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>18.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{5557d29b-4eea-46b0-bc77-ec4106621f34}</ProjectGuid>
+    <RootNamespace>PDCursesLib</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\build\vs\props\common-native.props" />
+    <Import Project="..\..\..\build\vs\props\pdcurses.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\build\vs\props\common-native.props" />
+    <Import Project="..\..\..\build\vs\props\pdcurses.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="pch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\addch.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\addchstr.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\addstr.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\attr.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\beep.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\bkgd.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\border.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\clear.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\color.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\debug.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\delch.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\deleteln.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\deprec.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\getch.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\getstr.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\getyx.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\inch.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\inchstr.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\initscr.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\inopts.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\insch.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\insstr.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\instr.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\kernel.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\keyname.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\mouse.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\move.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\outopts.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\overlay.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\pad.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\panel.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\printw.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\refresh.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\scanw.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\scroll.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\scr_dump.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\slk.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\termattr.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\terminfo.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\touch.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\util.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\pdcurses\window.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\wincon\pdcclip.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\wincon\pdcdisp.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\wincon\pdcgetsc.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\wincon\pdckbd.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\wincon\pdcscrn.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\wincon\pdcsetsc.c" />
+    <ClCompile Include="..\..\..\external\pdcurses\wincon\pdcutil.c" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="PDCursesLib.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
