@@ -10,7 +10,7 @@ namespace Door.Host
         private readonly int _doorId;
         private readonly Timer _timer;
 
-        private byte _state = 0; // 0=Closed, 1=Open, 2=Obstructed (placeholder)
+        private DoorState _state = DoorState.Closed;
 
         public DoorApp(ICanBus bus, int doorId)
         {
@@ -31,16 +31,9 @@ namespace Door.Host
         private void PublishStatus()
         {
             // Simple demo: cycle states each tick
-            _state = (byte)((_state + 1) % 3);
+            _state = (DoorState)(((int)_state + 1) % 3);
 
-            var frame = new CanFrame
-            {
-                Id = 0x200u + (uint)_doorId,     // example CAN ID per door
-                Dlc = 2,
-                Data = new byte[] { (byte)_doorId, _state },
-                Timestamp = DateTime.UtcNow
-            };
-
+            var frame = DoorStateFrame.Create((byte)_doorId, _state);
             _bus.Send(frame);
         }
 
