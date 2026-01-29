@@ -6,6 +6,10 @@ namespace Hmi.Host
 {
     public partial class App : Application
     {
+        private Common.Transport.Ipc.IpcCanBus? _bus;
+        private HmiApp? _hmiApp;
+        private bool _disposed;
+
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -20,11 +24,11 @@ namespace Hmi.Host
 
             string mode = options.GetValue("mode");
 
-            var bus = new Common.Transport.Ipc.IpcCanBus("RailCanBus", Common.Transport.Ipc.IpcCanBusRole.Server);
-            bus.Start();
-            ICanBus canBus = bus;
+            _bus = new Common.Transport.Ipc.IpcCanBus("RailCanBus", Common.Transport.Ipc.IpcCanBusRole.Server);
+            _bus.Start();
+            ICanBus canBus = _bus;
 
-            var hmiApp = new HmiApp(canBus);
+            _hmiApp = new HmiApp(canBus);
 
             if (mode.Equals("console", StringComparison.OrdinalIgnoreCase) ||
                 mode.Equals("both", StringComparison.OrdinalIgnoreCase))
@@ -65,12 +69,28 @@ namespace Hmi.Host
                 Console.WriteLine("Press ENTER to exit...");
                 Console.ReadLine();
 
-                hmiApp.Dispose();
-                bus.Dispose();
+                DisposeResources();
                 Shutdown();
             }
 
         }
 
+        protected override void OnExit(ExitEventArgs e)
+        {
+            DisposeResources();
+            base.OnExit(e);
+        }
+
+        private void DisposeResources()
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            _disposed = true;
+            _hmiApp?.Dispose();
+            _bus?.Dispose();
+        }
     }
 }
