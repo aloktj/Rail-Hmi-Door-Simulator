@@ -17,6 +17,7 @@ namespace Common.Transport.Ipc
     {
         private readonly string _pipeName;
         private readonly IpcCanBusRole _role;
+        private readonly Action<string, Exception> _log;
 
         private readonly CancellationTokenSource _cts = new CancellationTokenSource();
 
@@ -30,10 +31,21 @@ namespace Common.Transport.Ipc
         public event Action<CanFrame> FrameReceived;
 
         public IpcCanBus(string pipeName, IpcCanBusRole role)
+            : this(pipeName, role, (Action<string, Exception>)null)
+        {
+        }
+
+        public IpcCanBus(string pipeName, IpcCanBusRole role, IIpcCanBusLogger logger)
+            : this(pipeName, role, logger == null ? null : logger.LogError)
+        {
+        }
+
+        public IpcCanBus(string pipeName, IpcCanBusRole role, Action<string, Exception> log)
         {
             if (string.IsNullOrWhiteSpace(pipeName)) throw new ArgumentException("pipeName is required");
             _pipeName = pipeName;
             _role = role;
+            _log = log;
         }
 
         /// <summary>Starts background loops (server accept loop or client connect loop).</summary>
@@ -59,8 +71,15 @@ namespace Common.Transport.Ipc
                 var c = _client;
                 if (c == null || !c.IsConnected) return;
 
-                WriteFrame(c, frame);
-                c.Flush();
+                try
+                {
+                    WriteFrame(c, frame);
+                    c.Flush();
+                }
+                catch (Exception ex)
+                {
+                    LogFailure("Send", ex);
+                }
             }
             else
             {
@@ -81,9 +100,9 @@ namespace Common.Transport.Ipc
                             s.Flush();
                         }
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        // ignore broken client
+                        LogFailure("Send", ex);
                     }
                 }
             }
@@ -134,10 +153,11 @@ namespace Common.Transport.Ipc
                     Task.Run(() => ServerClientReadLoop(clientStream, ct));
                     server = null; // ownership transferred
                 }
-                catch
+                catch (Exception ex)
                 {
                     try { server?.Dispose(); } catch { }
                     if (ct.IsCancellationRequested) break;
+                    LogFailure("ServerAcceptLoop", ex);
                     Thread.Sleep(200);
                 }
             }
@@ -155,9 +175,9 @@ namespace Common.Transport.Ipc
                     FrameReceived?.Invoke(frame);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                // ignore
+                LogFailure("ServerClientReadLoop", ex);
             }
             finally
             {
@@ -189,10 +209,11 @@ namespace Common.Transport.Ipc
                     // Keep loop idle if connected
                     Thread.Sleep(500);
                 }
-                catch
+                catch (Exception ex)
                 {
                     try { _client?.Dispose(); } catch { }
                     _client = null;
+                    LogFailure("ClientConnectLoop", ex);
                     Thread.Sleep(500);
                 }
             }
@@ -209,9 +230,9 @@ namespace Common.Transport.Ipc
                     FrameReceived?.Invoke(frame);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                // ignore
+                LogFailure("ClientReadLoop", ex);
             }
         }
 
@@ -248,7 +269,7 @@ namespace Common.Transport.Ipc
             }
         }
 
-        private static CanFrame ReadFrame(Stream stream)
+        private CanFrame ReadFrame(Stream stream)
         {
             using (var br = new BinaryReader(stream, System.Text.Encoding.UTF8, leaveOpen: true))
             {
@@ -258,37 +279,65 @@ namespace Common.Transport.Ipc
                 {
                     len = br.ReadInt32();
                 }
-                catch
+                catch (Exception ex)
                 {
+                    LogFailure("ReadFrame", ex);
                     return null;
                 }
 
-                if (len <= 0 || len > 1024) return null; // sanity
+                if (len <= 0 || len > 1024)
+                {
+                    LogFailure("ReadFrame", new InvalidDataException($"Invalid frame length {len}."));
+                    return null; // sanity
+                }
 
                 var payload = br.ReadBytes(len);
-                if (payload.Length != len) return null;
+                if (payload.Length != len)
+                {
+                    LogFailure("ReadFrame", new EndOfStreamException($"Expected {len} bytes, received {payload.Length}."));
+                    return null;
+                }
 
                 using (var ms = new MemoryStream(payload))
                 using (var inBr = new BinaryReader(ms))
                 {
-                    var id = inBr.ReadUInt32();
-                    var dlc = inBr.ReadByte();
-                    if (dlc > 8) dlc = 8;
-                    var ticks = inBr.ReadInt64();
-
-                    var data = new byte[dlc];
-                    for (int i = 0; i < dlc; i++)
-                        data[i] = inBr.ReadByte();
-
-                    return new CanFrame
+                    try
                     {
-                        Id = id,
-                        Dlc = dlc,
-                        Data = data,
-                        Timestamp = new DateTime(ticks, DateTimeKind.Utc)
-                    };
+                        var id = inBr.ReadUInt32();
+                        var dlc = inBr.ReadByte();
+                        if (dlc > 8) dlc = 8;
+                        var ticks = inBr.ReadInt64();
+
+                        var data = new byte[dlc];
+                        for (int i = 0; i < dlc; i++)
+                            data[i] = inBr.ReadByte();
+
+                        return new CanFrame
+                        {
+                            Id = id,
+                            Dlc = dlc,
+                            Data = data,
+                            Timestamp = new DateTime(ticks, DateTimeKind.Utc)
+                        };
+                    }
+                    catch (Exception ex)
+                    {
+                        LogFailure("ReadFrame", ex);
+                        return null;
+                    }
                 }
             }
+        }
+
+        private void LogFailure(string operation, Exception exception)
+        {
+            if (_log == null || exception == null)
+            {
+                return;
+            }
+
+            var message = $"IpcCanBus {_role} pipe '{_pipeName}' {operation} failed.";
+            _log(message, exception);
         }
     }
 }

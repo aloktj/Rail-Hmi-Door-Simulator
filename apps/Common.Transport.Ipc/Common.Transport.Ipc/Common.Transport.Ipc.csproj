@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="IIpcCanBusLogger.cs" />
     <Compile Include="IpcCanBus.cs" />
     <Compile Include="IpcCanBusRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

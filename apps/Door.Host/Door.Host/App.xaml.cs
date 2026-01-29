@@ -24,6 +24,8 @@ namespace Door.Host
                 });
 
             string mode = options.GetValue("mode");
+            bool consoleMode = mode.Equals("console", StringComparison.OrdinalIgnoreCase) ||
+                mode.Equals("both", StringComparison.OrdinalIgnoreCase);
 
             int doorId = 1;
             string idStr = options.GetValue("id");
@@ -33,16 +35,35 @@ namespace Door.Host
                 if (doorId <= 0) doorId = 1;
             }
 
-            _bus = new Common.Transport.Ipc.IpcCanBus("RailCanBus", Common.Transport.Ipc.IpcCanBusRole.Client);
+            if (consoleMode)
+            {
+                ConsoleUi.ConsoleHost.EnsureConsoleAttached();
+            }
+
+            Action<string, Exception> busLogger = consoleMode
+                ? (message, exception) =>
+                {
+                    if (exception == null)
+                    {
+                        Console.WriteLine(message);
+                        return;
+                    }
+
+                    Console.WriteLine($"{message} {exception.GetType().Name}: {exception.Message}");
+                }
+                : null;
+
+            _bus = new Common.Transport.Ipc.IpcCanBus(
+                "RailCanBus",
+                Common.Transport.Ipc.IpcCanBusRole.Client,
+                busLogger);
             _bus.Start();
             ICanBus canBus = _bus;
 
             _doorApp = new DoorApp(canBus, doorId);
 
-            if (mode.Equals("console", StringComparison.OrdinalIgnoreCase) ||
-                mode.Equals("both", StringComparison.OrdinalIgnoreCase))
+            if (consoleMode)
             {
-                ConsoleUi.ConsoleHost.EnsureConsoleAttached();
                 var r = new ConsoleUi.ConsoleRenderer();
 
                 r.RenderHeader("Door Console");
