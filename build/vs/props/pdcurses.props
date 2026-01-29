@@ -4,6 +4,8 @@
     <ClCompile>
       <AdditionalIncludeDirectories>
         $(SolutionDir)..\..\external\pdcurses;
+        $(SolutionDir)..\..\external\pdcurses\pdcurses;
+        $(SolutionDir)..\..\external\pdcurses\wincon;
         %(AdditionalIncludeDirectories)
       </AdditionalIncludeDirectories>
     </ClCompile>
