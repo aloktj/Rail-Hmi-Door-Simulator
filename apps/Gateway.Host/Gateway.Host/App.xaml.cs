@@ -1,4 +1,5 @@
-﻿using Gateway.Host;
+﻿using Common.Can;
+using Gateway.Host;
 using System;
 using System.Windows;
 
@@ -10,7 +11,14 @@ namespace Gateway.Host   // <-- MUST match App.xaml x:Class namespace (Hmi.Host.
         {
             base.OnStartup(e);
 
-            string mode = GetArgValue(e.Args, "--mode") ?? "gui";
+            var options = CliOptions.Parse(
+                e.Args,
+                new System.Collections.Generic.Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    { "mode", "gui" }
+                });
+
+            string mode = options.GetValue("mode");
 
             if (mode.Equals("console", StringComparison.OrdinalIgnoreCase) ||
                 mode.Equals("both", StringComparison.OrdinalIgnoreCase))
@@ -38,16 +46,5 @@ namespace Gateway.Host   // <-- MUST match App.xaml x:Class namespace (Hmi.Host.
             }
         }
 
-        private static string GetArgValue(string[] args, string key)
-        {
-            if (args == null) return null;
-
-            for (int i = 0; i < args.Length - 1; i++)
-            {
-                if (args[i].Equals(key, StringComparison.OrdinalIgnoreCase))
-                    return args[i + 1];
-            }
-            return null;
-        }
     }
 }

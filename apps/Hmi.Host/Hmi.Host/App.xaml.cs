@@ -11,7 +11,14 @@ namespace Hmi.Host
             base.OnStartup(e);
             System.IO.File.AppendAllText("args.log", DateTime.Now.ToString("s") + " | " + string.Join(" ", e.Args) + Environment.NewLine);
 
-            string mode = GetArgValue(e.Args, "--mode") ?? "gui";
+            var options = CliOptions.Parse(
+                e.Args,
+                new System.Collections.Generic.Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    { "mode", "gui" }
+                });
+
+            string mode = options.GetValue("mode");
 
             var bus = new Common.Transport.Ipc.IpcCanBus("RailCanBus", Common.Transport.Ipc.IpcCanBusRole.Server);
             bus.Start();
@@ -65,16 +72,5 @@ namespace Hmi.Host
 
         }
 
-        private static string GetArgValue(string[] args, string key)
-        {
-            if (args == null) return null;
-
-            for (int i = 0; i < args.Length - 1; i++)
-            {
-                if (args[i].Equals(key, StringComparison.OrdinalIgnoreCase))
-                    return args[i + 1];
-            }
-            return null;
-        }
     }
 }
