@@ -11,10 +11,18 @@ namespace Door.Host
             base.OnStartup(e);
             System.IO.File.AppendAllText("args.log", DateTime.Now.ToString("s") + " | " + string.Join(" ", e.Args) + Environment.NewLine);
 
-            string mode = GetArgValue(e.Args, "--mode") ?? "gui";
+            var options = CliOptions.Parse(
+                e.Args,
+                new System.Collections.Generic.Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    { "mode", "gui" },
+                    { "id", "1" }
+                });
+
+            string mode = options.GetValue("mode");
 
             int doorId = 1;
-            string idStr = GetArgValue(e.Args, "--id");
+            string idStr = options.GetValue("id");
             if (!string.IsNullOrEmpty(idStr))
             {
                 int.TryParse(idStr, out doorId);
@@ -62,16 +70,5 @@ namespace Door.Host
             }
         }
 
-        private static string GetArgValue(string[] args, string key)
-        {
-            if (args == null) return null;
-
-            for (int i = 0; i < args.Length - 1; i++)
-            {
-                if (args[i].Equals(key, StringComparison.OrdinalIgnoreCase))
-                    return args[i + 1];
-            }
-            return null;
-        }
     }
 }
