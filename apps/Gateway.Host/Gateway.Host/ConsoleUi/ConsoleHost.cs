@@ -24,7 +24,7 @@ namespace Gateway.Host.ConsoleUi
                 AllocConsole();
             }
 
-            Console.Title = "Gatway Console";
+            Console.Title = "Gateway Console";
         }
 
         public static void DetachConsole()
