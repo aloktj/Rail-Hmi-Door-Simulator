@@ -1,0 +1,34 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="../../../apps/Door.Host/Door.Host/Door.Host.csproj" Id="55873828-7abf-43f3-b7fd-b855bdb1f57f">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="../../../apps/Gateway.Host/Gateway.Host/Gateway.Host.csproj" Id="34fba7c7-a057-437e-a7e1-a713c098d051">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="../../../apps/Hmi.Host/Hmi.Host/Hmi.Host.csproj" Id="2e99cc27-bd83-49bf-ab50-600f96304a0c">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="../../../native/Console.Runtime/Console.Runtime/Console.Runtime.vcxproj" Id="94bbe022-11f6-4a72-b9cb-2bcd32dc3dfc" />
+  <Project Path="../../../native/Door.Core/Door.Core/Door.Core.vcxproj" Id="026039fd-f1d0-4929-8b92-1ed518f1d11c">
+    <BuildDependency Project="../../../native/Transport.Pcan/Transport.Pcan/Transport.Pcan.vcxproj" />
+    <BuildDependency Project="../../../native/Tui.Curses/Tui.Curses/Tui.Curses.vcxproj" />
+  </Project>
+  <Project Path="../../../native/Gateway.Core/Gateway.Core/Gateway.Core.vcxproj" Id="700f9b74-4e04-4da7-8068-f8f6700bc9e9">
+    <BuildDependency Project="../../../native/Transport.Pcan/Transport.Pcan/Transport.Pcan.vcxproj" />
+    <BuildDependency Project="../../../native/Tui.Curses/Tui.Curses/Tui.Curses.vcxproj" />
+  </Project>
+  <Project Path="../../../native/Hmi.Core/Hmi.Core/Hmi.Core.vcxproj" Id="474e0ee2-1247-4110-bc60-27516e14ed41">
+    <BuildDependency Project="../../../native/Transport.Pcan/Transport.Pcan/Transport.Pcan.vcxproj" />
+    <BuildDependency Project="../../../native/Tui.Curses/Tui.Curses/Tui.Curses.vcxproj" />
+  </Project>
+  <Project Path="../../../native/PDCursesLib/PDCursesLib/PDCursesLib.vcxproj" Id="5557d29b-4eea-46b0-bc77-ec4106621f34" />
+  <Project Path="../../../native/Transport.Pcan/Transport.Pcan/Transport.Pcan.vcxproj" Id="6a08eeff-c56c-4ba0-99e3-fb5ae0a913d3" />
+  <Project Path="../../../native/Tui.Curses/Tui.Curses/Tui.Curses.vcxproj" Id="24d7a7b5-0a5e-486c-8efb-d9c2d52dba0b">
+    <BuildDependency Project="../../../native/PDCursesLib/PDCursesLib/PDCursesLib.vcxproj" />
+  </Project>
+</Solution>

@@ -116,5 +116,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common.Can\Common.Can\Common.Can.csproj">
+      <Project>{93b63145-d57e-466c-9d07-6188fcec764b}</Project>
+      <Name>Common.Can</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

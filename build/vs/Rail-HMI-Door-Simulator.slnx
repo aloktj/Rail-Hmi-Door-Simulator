@@ -4,6 +4,8 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
+  <Project Path="../../apps/Common.Can/Common.Can/Common.Can.csproj" Id="93b63145-d57e-466c-9d07-6188fcec764b" />
+  <Project Path="../../apps/Common.Transport.Ipc/Common.Transport.Ipc/Common.Transport.Ipc.csproj" Id="f389ad5e-3993-4e54-bb9f-58ab4cc48339" />
   <Project Path="../../apps/Door.Host/Door.Host/Door.Host.csproj" Id="55873828-7abf-43f3-b7fd-b855bdb1f57f">
     <Platform Solution="*|x64" Project="x64" />
   </Project>
