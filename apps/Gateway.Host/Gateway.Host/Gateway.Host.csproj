@@ -85,6 +85,7 @@
     </Compile>
     <Compile Include="ConsoleUi\ConsoleHost.cs" />
     <Compile Include="ConsoleUi\ConsoleRenderer.cs" />
+    <Compile Include="GatewayApp.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -120,6 +121,10 @@
     <ProjectReference Include="..\..\Common.Can\Common.Can\Common.Can.csproj">
       <Project>{93b63145-d57e-466c-9d07-6188fcec764b}</Project>
       <Name>Common.Can</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common.Transport.Ipc\Common.Transport.Ipc\Common.Transport.Ipc.csproj">
+      <Project>{f389ad5e-3993-4e54-bb9f-58ab4cc48339}</Project>
+      <Name>Common.Transport.Ipc</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

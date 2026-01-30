@@ -18,6 +18,11 @@ namespace Gateway.Host.ConsoleUi
             Console.WriteLine("--------------------------------------------------");
         }
 
+        public void RenderConnectionStatus(bool isConnected)
+        {
+            Console.WriteLine("CONNECTION: " + (isConnected ? "Connected" : "Disconnected"));
+        }
+
         public void Log(string msg)
         {
             Console.WriteLine(msg);

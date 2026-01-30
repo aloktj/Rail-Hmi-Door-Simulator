@@ -6,7 +6,23 @@
         xmlns:local="clr-namespace:Gateway.Host"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock FontSize="20" FontWeight="Bold" Text="Gateway Monitor" />
+        <TextBlock x:Name="ConnectionStatusText" Grid.Row="1" Margin="0,8,0,0" FontSize="12" Foreground="Gray" />
+        <ListView x:Name="FrameList" Grid.Row="2" Margin="0,12,0,0">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Timestamp" Width="180" DisplayMemberBinding="{Binding Timestamp}" />
+                    <GridViewColumn Header="CAN ID" Width="120" DisplayMemberBinding="{Binding CanId}" />
+                    <GridViewColumn Header="DLC" Width="60" DisplayMemberBinding="{Binding Dlc}" />
+                    <GridViewColumn Header="Data" Width="240" DisplayMemberBinding="{Binding Data}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Window>

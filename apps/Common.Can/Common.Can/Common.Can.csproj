@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="CanFrame.cs" />
     <Compile Include="CliOptions.cs" />
+    <Compile Include="DoorStateFrame.cs" />
     <Compile Include="ICanBus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
