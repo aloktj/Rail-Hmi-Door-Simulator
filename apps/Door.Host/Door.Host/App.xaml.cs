@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Windows;
 using Common.Can;
+using Common.Transport.Ipc;
 
 namespace Door.Host
 {
     public partial class App : Application
     {
-        private Common.Transport.Ipc.IpcCanBus? _bus;
+        private IpcCanBus? _bus;
         private DoorApp? _doorApp;
         private bool _disposed;
 
@@ -53,14 +54,15 @@ namespace Door.Host
                 }
                 : null;
 
-            _bus = new Common.Transport.Ipc.IpcCanBus(
+            _bus = new IpcCanBus(
                 "RailCanBus",
-                Common.Transport.Ipc.IpcCanBusRole.Client,
+                IpcCanBusRole.Client,
                 busLogger);
             _bus.Start();
             ICanBus canBus = _bus;
 
             _doorApp = new DoorApp(canBus, doorId);
+            _doorApp.Start();
 
             if (consoleMode)
             {
@@ -73,17 +75,16 @@ namespace Door.Host
 
                 _bus.ConnectionStateChanged += r.RenderConnectionStatus;
 
-                _doorApp.Start();
             }
 
             if (mode.Equals("gui", StringComparison.OrdinalIgnoreCase))
             {
-                var win = new MainWindow();
+                var win = new MainWindow(_doorApp ?? throw new InvalidOperationException("Door app not initialized."), doorId);
                 win.Show();
             }
             else if (mode.Equals("both", StringComparison.OrdinalIgnoreCase))
             {
-                var win = new MainWindow();
+                var win = new MainWindow(_doorApp ?? throw new InvalidOperationException("Door app not initialized."), doorId);
                 win.Show();
             }
             else

@@ -12,6 +12,8 @@ namespace Door.Host
 
         private DoorState _state = DoorState.Closed;
 
+        public event Action<DoorState> StatePublished;
+
         public DoorApp(ICanBus bus, int doorId)
         {
             _bus = bus ?? throw new ArgumentNullException(nameof(bus));
@@ -35,6 +37,7 @@ namespace Door.Host
 
             var frame = DoorStateFrame.Create((byte)_doorId, _state);
             _bus.Send(frame);
+            StatePublished?.Invoke(_state);
         }
 
         public void Dispose()

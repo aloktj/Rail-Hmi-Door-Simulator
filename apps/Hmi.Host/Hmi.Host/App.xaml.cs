@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Windows;
 using Common.Can;
+using Common.Transport.Ipc;
 
 namespace Hmi.Host
 {
     public partial class App : Application
     {
-        private Common.Transport.Ipc.IpcCanBus? _bus;
+        private IpcCanBus? _bus;
         private HmiApp? _hmiApp;
         private bool _disposed;
 
@@ -44,9 +45,9 @@ namespace Hmi.Host
                 }
                 : null;
 
-            _bus = new Common.Transport.Ipc.IpcCanBus(
+            _bus = new IpcCanBus(
                 "RailCanBus",
-                Common.Transport.Ipc.IpcCanBusRole.Server,
+                IpcCanBusRole.Server,
                 busLogger);
             _bus.Start();
             ICanBus canBus = _bus;
@@ -79,12 +80,12 @@ namespace Hmi.Host
 
             if (mode.Equals("gui", StringComparison.OrdinalIgnoreCase))
             {
-                var win = new MainWindow();
+                var win = new MainWindow(_hmiApp ?? throw new InvalidOperationException("HMI app not initialized."));
                 win.Show();
             }
             else if (mode.Equals("both", StringComparison.OrdinalIgnoreCase))
             {
-                var win = new MainWindow();
+                var win = new MainWindow(_hmiApp ?? throw new InvalidOperationException("HMI app not initialized."));
                 win.Show();
             }
             else

@@ -1,17 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Common.Can;
 
 namespace Door.Host
 {
@@ -20,9 +9,30 @@ namespace Door.Host
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        private readonly DoorApp _doorApp;
+        private readonly int _doorId;
+
+        public MainWindow(DoorApp doorApp, int doorId)
         {
+            _doorApp = doorApp ?? throw new ArgumentNullException(nameof(doorApp));
+            _doorId = doorId;
             InitializeComponent();
+
+            DoorIdText.Text = $"Door ID: {_doorId}";
+            StateText.Text = "State: Starting...";
+            LastUpdateText.Text = "Last update: --";
+
+            _doorApp.StatePublished += OnStatePublished;
+            Closed += (_, __) => _doorApp.StatePublished -= OnStatePublished;
+        }
+
+        private void OnStatePublished(DoorState state)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                StateText.Text = $"State: {state}";
+                LastUpdateText.Text = $"Last update: {DateTime.Now:HH:mm:ss}";
+            });
         }
     }
 }

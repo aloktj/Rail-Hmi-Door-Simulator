@@ -6,7 +6,20 @@
         xmlns:local="clr-namespace:Hmi.Host"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock FontSize="20" FontWeight="Bold" Text="HMI Door Monitor" />
+        <ListView x:Name="DoorList" Grid.Row="1" Margin="0,12,0,0">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Door ID" Width="80" DisplayMemberBinding="{Binding DoorId}" />
+                    <GridViewColumn Header="State" Width="140" DisplayMemberBinding="{Binding State}" />
+                    <GridViewColumn Header="Last Update" Width="180" DisplayMemberBinding="{Binding LastUpdated}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Window>

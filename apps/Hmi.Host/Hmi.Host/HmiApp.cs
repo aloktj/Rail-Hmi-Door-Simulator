@@ -7,6 +7,8 @@ namespace Hmi.Host
     {
         private readonly ICanBus _bus;
 
+        public event Action<byte, DoorState, CanFrame> DoorStateReceived;
+
         public HmiApp(ICanBus bus)
         {
             _bus = bus ?? throw new ArgumentNullException(nameof(bus));
@@ -21,6 +23,7 @@ namespace Hmi.Host
             }
 
             Console.WriteLine($"[HMI] Door {doorId} state={state}  (from ID=0x{frame.Id:X})");
+            DoorStateReceived?.Invoke(doorId, state, frame);
         }
 
         public void Dispose()
